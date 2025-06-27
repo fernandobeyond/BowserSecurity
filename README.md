@@ -60,16 +60,16 @@ Ambos componentes están modelados en UML y siguen principios de diseño orienta
 
 ## 📂 Estructura del Proyecto
 
-BowserSecurity/`\`
-├── app/`\`
-│   ├── bowSec.py            # Interfaz gráfica y lógica principal`\`
-│   ├── models/              # Modelo de detección YOLO`\`
-│   ├── capturas/            # Capturas de imágenes realizadas`\`
-├── server/`\`
-│   ├── main_controller.py   # Procesamiento del lado servidor`\`
-├── .env                     # Variables de entorno (claves y credenciales)`\`
-├── .gitignore`\`
-├── requirements.txt`\`
+BowserSecurity/
+├── app/\
+│   ├── bowSec.py            # Interfaz gráfica y lógica principal\
+│   ├── models/              # Modelo de detección YOLO\
+│   ├── capturas/            # Capturas de imágenes realizadas\
+├── server/\
+│   ├── main_controller.py   # Procesamiento del lado servidor\
+├── .env                     # Variables de entorno (claves y credenciales)\
+├── .gitignore\
+├── requirements.txt\
 └── README.md
 
 ---
