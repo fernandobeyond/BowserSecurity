@@ -60,7 +60,7 @@ Ambos componentes están modelados en UML y siguen principios de diseño orienta
 
 ## 📂 Estructura del Proyecto
 
-BowserSecurity/
+BowserSecurity/\
 ├── app/\
 │   ├── bowSec.py            # Interfaz gráfica y lógica principal\
 │   ├── models/              # Modelo de detección YOLO\
