@@ -87,7 +87,7 @@ cd BowserSecurity
 2.	Instala dependencias:
 ```
 pip install -r requirements.txt
-´´´
+```
 
 3.	Crear el archivo .env con tus credenciales:
 ```
@@ -96,4 +96,4 @@ TWILIO_AUTH_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 TWILIO_PHONE_NUMBER=+1XXXXXXXXXX
 EMAIL_SENDER=tuemail@gmail.com
 EMAIL_PASSWORD=app-password-o-contraseña
-´´´
+```
