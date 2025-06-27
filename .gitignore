@@ -1,0 +1,13 @@
+# Evita subir el archivo con claves
+.env
+.DS_Store
+
+# Carpetas comunes que no deben subirse
+__pycache__/
+*.py[cod]
+*.log
+
+# Entornos virtuales
+venv/
+.env/
+ENV/

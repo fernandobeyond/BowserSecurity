@@ -6,6 +6,7 @@ import numpy as np
 from ultralytics import YOLO
 import threading
 import time
+from dotenv import load_dotenv
 from datetime import datetime
 import os
 from pygame import mixer
@@ -20,6 +21,8 @@ from twilio.rest import Client
 
 # Inicializar mixer de pygame para reproducir el audio
 mixer.init()
+
+load_dotenv()  # Carga las variables desde el archivo .env
 
 # Cargar el modelo YOLO
 try:
@@ -40,9 +43,9 @@ EMAIL_SENDER = "YOUR_EMAIL_ADDRESS"     # Se ingresa el correo
 EMAIL_PASSWORD = "YOUR_EMAIL_PASSWORD"  # Se ingresa la contraseña de aplicación
 EMAIL_RECEIVER = "f.flores.q@uni.pe"    # Correo de destino
 
-TWILIO_ACCOUNT_SID = "TWILIO_ACCOUNT_SID"       # ACCOUNT_SID del Twilio
-TWILIO_AUTH_TOKEN = "TWILIO_AUTH_TOKEN"         # AUTH_TOKEN del Twilio
-TWILIO_PHONE_NUMBER = "TWILIO_PHONE_NUMBER"     # Numero publico del Twilio
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")    # ACCOUNT_SID del Twilio
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")      # AUTH_TOKEN del Twilio
+TWILIO_PHONE_NUMBER = os.getenv("TWILIO_AUTH_TOKEN")     # Numero publico del Twilio
 SMS_RECEIVER_NUMBER = ["NUMBERS"]
 
 # Clase para la pantalla de inicio de sesión
