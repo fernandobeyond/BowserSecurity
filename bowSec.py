@@ -10,6 +10,14 @@ from datetime import datetime
 import os
 from pygame import mixer
 
+# Importaciones para el envío de correo electrónico
+import smtplib
+import ssl
+from email.message import EmailMessage
+
+# Importación para el envío de SMS (Twilio)
+from twilio.rest import Client
+
 # Inicializar mixer de pygame para reproducir el audio
 mixer.init()
 
@@ -27,6 +35,15 @@ AGGRESSIVE_CLASSES = ['knife', 'gun']
 CAMERA_URL = 'https://raspberrybowser.ngrok.app/video'
 
 ALARM_SOUND_PATH = 'alarm.mp3'
+
+EMAIL_SENDER = "YOUR_EMAIL_ADDRESS"     # Se ingresa el correo
+EMAIL_PASSWORD = "YOUR_EMAIL_PASSWORD"  # Se ingresa la contraseña de aplicación
+EMAIL_RECEIVER = "f.flores.q@uni.pe"    # Correo de destino
+
+TWILIO_ACCOUNT_SID = "TWILIO_ACCOUNT_SID"   # ACCOUNT_SID del Twilio
+TWILIO_AUTH_TOKEN = "TWILIO_AUTH_TOKEN"      # AUTH_TOKEN del Twilio
+TWILIO_PHONE_NUMBER = "TWILIO_PHONE_NUMBER"                        # Numero publico del Twilio
+SMS_RECEIVER_NUMBER = ["NUMBERS"]
 
 # Clase para la pantalla de inicio de sesión
 class LoginScreen:
@@ -226,6 +243,39 @@ class MainApplication:
         messagebox.showinfo("Reconectar Video", "Intentando reconectar el video...")
         self.start_video_stream()
 
+    # Envía una alerta por correo electrónico
+    def send_email_alert(self, message_body):
+        msg = EmailMessage()
+        msg.set_content(f"Amenaza detectada: {message_body}")
+        msg['Subject'] = "ALERTA DE SEGURIDAD: AMENAZA DETECTADA"
+        msg['From'] = EMAIL_SENDER
+        msg['To'] = EMAIL_RECEIVER
+
+        try:
+            context = ssl.create_default_context()
+            with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
+                smtp.login(EMAIL_SENDER, EMAIL_PASSWORD)
+                smtp.send_message(msg)
+            print("Alerta por correo electrónico enviada exitosamente.")
+        except Exception as e:
+            print(f"Error al enviar correo electrónico: {e}")
+            messagebox.showerror("Error de Correo", f"No se pudo enviar el correo electrónico de alerta: {e}")
+
+    # Envía una alerta por SMS usando Twilio
+    def send_sms_alert(self, message_body):
+        try:
+            client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+            for number in SMS_RECEIVER_NUMBER: # Iterar sobre la lista de números
+                message = client.messages.create(
+                    to=number,  # Envía a cada número en la lista
+                    from_=TWILIO_PHONE_NUMBER,
+                    body=f"ALERTA: Amenaza detectada. {message_body}"
+                )
+                print(f"Alerta SMS enviada exitosamente a {number}. SID del mensaje: {message.sid}")
+        except Exception as e:
+            print(f"Error al enviar SMS: {e}")
+            messagebox.showerror("Error de SMS", f"No se pudo enviar el SMS de alerta: {e}\nPor favor, verifica tus credenciales y números de Twilio.")
+    
     def video_processing_loop(self):
         while self.video_width == 0 or self.video_height == 0:
             time.sleep(0.1)
@@ -245,12 +295,16 @@ class MainApplication:
             processed_frame, aggressive_people_count, victim_count = self.process_frame(frame)
             self.current_processed_frame = processed_frame.copy()
 
-            # Controla la alarma basado en la detección de personas agresivas
+            # Controlar la alarma y enviar notificación basado en la detección de personas agresivas
             if aggressive_people_count > 0:
                 if not self.is_aggressive_detected:
                     self.is_aggressive_detected = True
                     self.last_aggressive_detection_time = datetime.now()
+                    log_message = f"Agresores: {aggressive_people_count}, Víctimas Cercanas: {victim_count}."
                     self.log_incident(aggressive_people_count, victim_count)
+                    # Enviar correo y SMS cuando se detecta por primera vez
+                    self.send_email_alert(log_message)
+                    self.send_sms_alert(log_message)
                     self.play_alarm()
             else:
                 if self.is_aggressive_detected:
@@ -259,7 +313,6 @@ class MainApplication:
 
             # Redimensionar el frame para ajustarse al label
             h, w, _ = processed_frame.shape
-            # Aseguramos de el video_width y video_height no sean cero antes de calcular el ratio
             if self.video_width > 0 and self.video_height > 0:
                 ratio = min(self.video_width / w, self.video_height / h)
                 new_w = int(w * ratio)
