@@ -97,3 +97,37 @@ TWILIO_PHONE_NUMBER=+1XXXXXXXXXX
 EMAIL_SENDER=tuemail@gmail.com
 EMAIL_PASSWORD=app-password-o-contraseña
 ```
+
+4.	Asegúrate de tener el modelo YOLOv8 (yolov8n.pt) en la carpeta correspondiente.
+
+🚀 Uso del Sistema
+1.	Ejecuta la aplicación:
+```
+python app/bowSec.py
+```
+2.	Inicia sesión con:
+    -	Usuario: Bowser
+	-	Contraseña: 12345678
+
+3.	Activa la cámara, captura imágenes, ejecuta análisis y envía alertas por SMS o email.
+
+---
+
+🔐 Seguridad y Buenas Prácticas
+-	Las claves y credenciales están protegidas en .env, que está en .gitignore.
+-	Se implementa un sistema de logs de autenticación (auth.log).
+-	El sistema está preparado para su escalamiento modular.
+
+---
+
+👨‍💻 Contribuciones
+
+Este proyecto se desarrolló como parte del curso Programación Orientada a Objetos (FIEE - UNI).
+No se aceptan pull requests públicos, pero puedes hacer forks para uso académico o personal.
+
+---
+
+📜 Licencia
+
+Este repositorio es de uso académico, sin fines comerciales.
+© 2025 – Universidad Nacional de Ingeniería, Lima – Perú.
