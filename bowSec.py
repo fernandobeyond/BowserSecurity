@@ -39,14 +39,46 @@ CAMERA_URL = 'https://raspberrybowser.ngrok.app/video'
 
 ALARM_SOUND_PATH = 'alarm.mp3'
 
-EMAIL_SENDER = os.getenv("EMAIL_SENDER")     # Se ingresa el correo
-EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")  # Se ingresa la contraseña de aplicación
-EMAIL_RECEIVER = "f.flores.q@uni.pe"    # Correo de destino
+# Datos para el emisor y receptor del correo
+EMAIL_SENDER = os.getenv("EMAIL_SENDER")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+EMAIL_RECEIVER = "f.flores.q@uni.pe"
 
-TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")    # ACCOUNT_SID del Twilio
-TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")      # AUTH_TOKEN del Twilio
-TWILIO_PHONE_NUMBER = os.getenv("TWILIO_AUTH_TOKEN")     # Numero publico del Twilio
-SMS_RECEIVER_NUMBER = ["NUMBERS"]
+# Datos para el emisor y receptor del SMS
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN") 
+TWILIO_PHONE_NUMBER = os.getenv("TWILIO_AUTH_TOKEN")
+SMS_RECEIVER_NUMBER = ["+5197954631", "+51940317018", "+51925446899"]
+
+# Funciones globales
+def send_login_email():
+    msg = EmailMessage()
+    msg.set_content("Bienvenido a BowserSecurity")
+    msg['Subject'] = "Bienvenido a BowserSecurity"
+    msg['From'] = EMAIL_SENDER
+    msg['To'] = EMAIL_RECEIVER
+
+    try:
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
+            smtp.login(EMAIL_SENDER, EMAIL_PASSWORD)
+            smtp.send_message(msg)
+        print("Correo de bienvenida enviado exitosamente.")
+    except Exception as e:
+        print(f"Error al enviar correo de bienvenida: {e}")
+
+def send_login_sms():
+    try:
+        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+        for number in SMS_RECEIVER_NUMBER:
+            message = client.messages.create(
+                to=number,
+                from_=TWILIO_PHONE_NUMBER,
+                body="Bienvenido a BowserSecurity"
+            )
+            print(f"SMS de bienvenida enviado exitosamente a {number}. SID del mensaje: {message.sid}")
+    except Exception as e:
+        print(f"Error al enviar SMS de bienvenida: {e}")
 
 # Clase para la pantalla de inicio de sesión
 class LoginScreen:
@@ -105,7 +137,11 @@ class LoginScreen:
         entered_password = self.password_entry.get()
 
         if entered_username == self.username and entered_password == self.password:
-            self.master.destroy()
+            # Enviar correo y SMS de bienvenida al iniciar sesión
+            send_login_email()
+            send_login_sms()
+
+            self.master.destroy()  # Cierra la ventana de inicio de sesión
             root = tk.Tk()
             app = MainApplication(root)
             root.mainloop()
