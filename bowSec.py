@@ -39,8 +39,8 @@ CAMERA_URL = 'https://raspberrybowser.ngrok.app/video'
 
 ALARM_SOUND_PATH = 'alarm.mp3'
 
-EMAIL_SENDER = "YOUR_EMAIL_ADDRESS"     # Se ingresa el correo
-EMAIL_PASSWORD = "YOUR_EMAIL_PASSWORD"  # Se ingresa la contraseña de aplicación
+EMAIL_SENDER = os.getenv("EMAIL_SENDER")     # Se ingresa el correo
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")  # Se ingresa la contraseña de aplicación
 EMAIL_RECEIVER = "f.flores.q@uni.pe"    # Correo de destino
 
 TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")    # ACCOUNT_SID del Twilio
