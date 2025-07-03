@@ -1,6 +1,7 @@
 # Evita subir el archivo con claves
 .env
 .DS_Store
+.olds
 
 # Carpetas comunes que no deben subirse
 __pycache__/
