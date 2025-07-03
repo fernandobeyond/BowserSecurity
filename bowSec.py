@@ -26,7 +26,7 @@ load_dotenv()  # Carga las variables desde el archivo .env
 
 # Cargar el modelo YOLO
 try:
-    model = YOLO("yolov8n.pt")
+    model = YOLO("media/yolov8n.pt")
 except Exception as e:
     messagebox.showerror("Error de Modelo", f"No se pudo cargar el modelo YOLOv8n.pt: {e}\nAsegúrate de que 'yolov8n.pt' esté en el mismo directorio.")
     exit()
@@ -37,7 +37,7 @@ AGGRESSIVE_CLASSES = ['knife', 'gun']
 # URL de la cámara (usando ngrok)
 CAMERA_URL = 'https://raspberrybowser.ngrok.app/video'
 
-ALARM_SOUND_PATH = 'alarm.mp3'
+ALARM_SOUND_PATH = 'media/alarm.mp3'
 
 # Datos para el emisor y receptor del correo
 EMAIL_SENDER = os.getenv("EMAIL_SENDER")
