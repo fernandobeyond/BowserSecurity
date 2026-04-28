@@ -11,7 +11,7 @@ from datetime import datetime
 import os
 from pygame import mixer
 
-# Importaciones para el envío de correo electrónico
+# Importaciones para el envío de correo electrónico xd
 import smtplib
 import ssl
 from email.message import EmailMessage
